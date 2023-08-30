@@ -1,5 +1,6 @@
-package com.pduneva.gateway.api.model;
+package com.pduneva.gateway.model.api;
 
+import com.pduneva.gateway.model.CurrencyRate;
 import lombok.*;
 
 import java.util.Map;
@@ -12,5 +13,5 @@ public class CurrencyInfoResponse {
     private long timestamp;
     private String base;
     private String date;
-    private Map<String, Double> rates;
+    private Map<CurrencyRate, Double> rates;
 }

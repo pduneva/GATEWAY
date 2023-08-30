@@ -1,6 +1,6 @@
 package com.pduneva.gateway.service;
 
-import com.pduneva.gateway.api.model.CurrencyInfoResponse;
+import com.pduneva.gateway.model.api.CurrencyInfoResponse;
 import com.pduneva.gateway.exception.CurrencyRetrieveException;
 import com.pduneva.gateway.model.CurrencyRate;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,8 +17,10 @@ public class FixerRestService {
 
     private final RestTemplate restTemplate;
 
-    public FixerRestService(@Value("${fixer.base.url}") String API_URL, @Value("${fixer.api.key}") String API_KEY) {
-        System.out.println(API_URL);
+    public FixerRestService(
+            @Value("${fixer.base.url}") String API_URL,
+            @Value("${fixer.api.key}") String API_KEY
+    ) {
         this.API_URL = API_URL;
         this.API_KEY = API_KEY;
         restTemplate = new RestTemplate();
@@ -37,7 +39,7 @@ public class FixerRestService {
         ResponseEntity<CurrencyInfoResponse> response = restTemplate
                 .getForEntity(getRequestPath(), CurrencyInfoResponse.class);
         if(response.getBody() == null || !response.getBody().isSuccess()) {
-            throw new CurrencyRetrieveException("Failed to retrieve currency!");
+            throw new CurrencyRetrieveException("Failed to retrieve currencies!");
         }
         return response.getBody();
     }
