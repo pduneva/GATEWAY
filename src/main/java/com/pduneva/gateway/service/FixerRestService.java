@@ -24,15 +24,24 @@ public class FixerRestService {
         restTemplate = new RestTemplate();
     }
 
-
     public CurrencyInfoResponse getCurrencyInfo(CurrencyRate rate) throws CurrencyRetrieveException {
         ResponseEntity<CurrencyInfoResponse> response = restTemplate
-                .getForEntity(getRequestPath() + "&symbols=" +"dwsfewg", CurrencyInfoResponse.class);
+                .getForEntity(getRequestPath() + "&symbols=" + rate.name(), CurrencyInfoResponse.class);
         if(response.getBody() == null || !response.getBody().isSuccess()) {
             throw new CurrencyRetrieveException("Failed to retrieve currency!");
         }
         return response.getBody();
     }
+
+    public CurrencyInfoResponse getAllCurrencyInfo() throws CurrencyRetrieveException {
+        ResponseEntity<CurrencyInfoResponse> response = restTemplate
+                .getForEntity(getRequestPath(), CurrencyInfoResponse.class);
+        if(response.getBody() == null || !response.getBody().isSuccess()) {
+            throw new CurrencyRetrieveException("Failed to retrieve currency!");
+        }
+        return response.getBody();
+    }
+
 
     private String getRequestPath() {
         return API_URL + "latest?access_key=" + API_KEY;
