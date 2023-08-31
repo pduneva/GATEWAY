@@ -27,6 +27,7 @@ public class FixerSchedulerService {
     @Scheduled(fixedRateString = "${fixer.receive.rate}")
     public void getCurrenciesJob() {
         try {
+            logger.info("Starting job for saving currencies in database");
             CurrencyInfoResponse currencies = fixerRestService.getAllCurrencyInfo();
             currencyHistoryService.saveCurrenciesOnBulk(currencies);
         } catch (CurrencyRetrieveException e) {
