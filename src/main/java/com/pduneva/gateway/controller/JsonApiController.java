@@ -37,7 +37,7 @@ public class JsonApiController {
     @ResponseBody
     public ResponseEntity getCurrentCurrencyRate(@RequestBody CurrentRateRequest currentRateRequest)
             throws CurrencyRetrieveException, DuplicateRequestIdException {
-        apiRequestHistoryService.getApiRequestHistory(currentRateRequest, this.getClass().getSimpleName());
+        apiRequestHistoryService.getApiRequestHistory(currentRateRequest, this.getClass().getSimpleName(), currentRateRequest.getRequestId());
 
         CurrencyHistory currencyHistory = currencyHistoryService.getCurrencyHistoryLast(currentRateRequest);
         return ResponseEntity.ok(currencyHistory);
@@ -47,7 +47,7 @@ public class JsonApiController {
     @ResponseBody
     public ResponseEntity getCurrentHistoryRate(@RequestBody HistoryRateRequest historyRateRequest)
             throws CurrencyRetrieveException, DuplicateRequestIdException {
-        apiRequestHistoryService.getApiRequestHistory(historyRateRequest, this.getClass().getSimpleName());
+        apiRequestHistoryService.getApiRequestHistory(historyRateRequest, this.getClass().getSimpleName(), historyRateRequest.getRequestId());
 
         List<CurrencyHistory> currencyHistoryList =
                 currencyHistoryService.getCurrencyHistoryByPeriod(historyRateRequest);

@@ -6,7 +6,11 @@ import com.pduneva.gateway.model.ApiRequestHistory;
 import com.pduneva.gateway.model.api.CurrentRateRequest;
 import com.pduneva.gateway.repository.ApiRequestHistoryRepository;
 import org.modelmapper.ModelMapper;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 
 @Service
@@ -21,20 +25,31 @@ public class ApiRequestHistoryService {
         this.modelMapper = new ModelMapper();
     }
 
-    public ApiRequestHistory saveApiRequestHistory(CurrentRateRequest currentRateRequest, String serviceName) {
+    @CacheEvict(value = "request", key = "#requestId")
+    public ApiRequestHistory saveApiRequestHistory(
+            CurrentRateRequest currentRateRequest,
+            String serviceName,
+            UUID requestId
+
+    ) {
         ApiRequestHistory apiRequestHistory = modelMapper.map(currentRateRequest, ApiRequestHistory.class);
         apiRequestHistory.setServiceName(serviceName);
         return apiRequestHistoryRepository.save(apiRequestHistory);
     }
 
-    public ApiRequestHistory getApiRequestHistory(CurrentRateRequest currentRateRequest, String serviceName)
-            throws DuplicateRequestIdException {
+    @Cacheable(value = "request", key = "#requestId")
+    public ApiRequestHistory getApiRequestHistory(
+            CurrentRateRequest currentRateRequest,
+            String serviceName,
+            UUID requestId
+    ) throws DuplicateRequestIdException {
+
         ApiRequestHistory apiRequestHistory =
                 apiRequestHistoryRepository.findById(currentRateRequest.getRequestId()).orElse(null);
         if(apiRequestHistory != null) {
             throw new DuplicateRequestIdException("Request id: " + currentRateRequest.getRequestId());
         }
-        apiRequestHistory = saveApiRequestHistory(currentRateRequest, serviceName);
+        apiRequestHistory = saveApiRequestHistory(currentRateRequest, serviceName, requestId);
         return apiRequestHistory;
     }
 
