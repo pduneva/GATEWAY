@@ -9,10 +9,8 @@ import java.util.UUID;
 
 @Getter @Setter @ToString
 @AllArgsConstructor @NoArgsConstructor
-@Entity
 public class CurrentRateRequest {
 
-    @Id
     private UUID requestId;
 
     private Long timestamp;
