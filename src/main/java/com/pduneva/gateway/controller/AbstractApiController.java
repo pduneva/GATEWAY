@@ -3,6 +3,7 @@ package com.pduneva.gateway.controller;
 import com.pduneva.gateway.exception.CurrencyRetrieveException;
 import com.pduneva.gateway.exception.DuplicateRequestIdException;
 import com.pduneva.gateway.model.CurrencyHistory;
+import com.pduneva.gateway.model.api.CurrencyHistoryList;
 import com.pduneva.gateway.model.api.CurrentRateRequest;
 import com.pduneva.gateway.model.api.HistoryRateRequest;
 import com.pduneva.gateway.service.ApiRequestHistoryService;
@@ -46,6 +47,6 @@ public class AbstractApiController {
         List<CurrencyHistory> currencyHistoryList =
                 currencyHistoryService.getCurrencyHistoryByPeriod(historyRateRequest);
 
-        return ResponseEntity.ok(currencyHistoryList);
+        return ResponseEntity.ok(new CurrencyHistoryList(currencyHistoryList));
     }
 }
