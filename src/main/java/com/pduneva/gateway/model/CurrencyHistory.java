@@ -1,6 +1,8 @@
 package com.pduneva.gateway.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.xml.bind.annotation.XmlRootElement;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -9,10 +11,12 @@ import java.util.Date;
 @Entity
 @Getter @Setter @ToString
 @AllArgsConstructor @NoArgsConstructor
+@XmlRootElement
 public class CurrencyHistory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @JsonIgnore
     private Long id;
 
     private Long timestamp;

@@ -1,8 +1,6 @@
 package com.pduneva.gateway.model.api;
 
 import com.pduneva.gateway.model.CurrencyRate;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 import lombok.*;
 
 import java.util.UUID;
@@ -18,5 +16,4 @@ public class CurrentRateRequest {
     private Long client;
 
     private CurrencyRate currency;
-
 }
