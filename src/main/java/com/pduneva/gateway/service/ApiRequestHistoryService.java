@@ -46,6 +46,16 @@ public class ApiRequestHistoryService {
 
         ApiRequestHistory apiRequestHistory =
                 apiRequestHistoryRepository.findById(currentRateRequest.getRequestId()).orElse(null);
+
+        return apiRequestHistory;
+    }
+
+    public ApiRequestHistory checkApiRequestHistory(
+            CurrentRateRequest currentRateRequest,
+            String serviceName,
+            UUID requestId
+    ) throws DuplicateRequestIdException {
+        ApiRequestHistory apiRequestHistory = getApiRequestHistory(currentRateRequest, serviceName, requestId);
         if(apiRequestHistory != null) {
             throw new DuplicateRequestIdException("Request id: " + currentRateRequest.getRequestId());
         }
