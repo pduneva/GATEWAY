@@ -20,9 +20,15 @@ public class ApiRequestHistoryService {
 
     private final ApiRequestHistoryRepository apiRequestHistoryRepository;
 
-    public ApiRequestHistoryService(ApiRequestHistoryRepository apiRequestHistoryRepository) {
-        this.apiRequestHistoryRepository = apiRequestHistoryRepository;
+    private final RabbitMqService rabbitMqService;
+
+    public ApiRequestHistoryService(
+            ApiRequestHistoryRepository apiRequestHistoryRepository,
+            RabbitMqService rabbitMqService
+    ) {
         this.modelMapper = new ModelMapper();
+        this.apiRequestHistoryRepository = apiRequestHistoryRepository;
+        this.rabbitMqService = rabbitMqService;
     }
 
     @CacheEvict(value = "request", key = "#requestId")
@@ -55,6 +61,8 @@ public class ApiRequestHistoryService {
             String serviceName,
             UUID requestId
     ) throws DuplicateRequestIdException {
+        rabbitMqService.sendMessage(currentRateRequest.toString());
+
         ApiRequestHistory apiRequestHistory = getApiRequestHistory(currentRateRequest, serviceName, requestId);
         if(apiRequestHistory != null) {
             throw new DuplicateRequestIdException("Request id: " + currentRateRequest.getRequestId());
